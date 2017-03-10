@@ -32,6 +32,12 @@ export const doubleAsync = () => {
   }
 }
 
+export const pingEpic = (action$, { dispatch, getState }) => {
+  return action$.ofType(COUNTER_INCREMENT)
+    .delay(1000) // Asynchronously wait 1000ms then continue
+    .mapTo({ type: COUNTER_DOUBLE_ASYNC })
+}
+
 export const actions = {
   increment,
   doubleAsync
