@@ -12,7 +12,7 @@ export default (store) => ({
           dependencies for bundling   */
       const Counter = require('./containers/CounterContainer').default
       const reducer = require('./modules/counter').default
-      const epic = require('./modules/counter').pingEpic
+      const epic = require('./modules/counter').testEpic
 
       /*  Add the reducer to the store on key 'counter'  */
       injectReducer(store, { key: 'counter', reducer })

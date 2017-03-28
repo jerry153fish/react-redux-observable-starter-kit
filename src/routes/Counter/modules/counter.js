@@ -3,6 +3,7 @@
 // ------------------------------------
 export const COUNTER_INCREMENT = 'COUNTER_INCREMENT'
 export const COUNTER_DOUBLE_ASYNC = 'COUNTER_DOUBLE_ASYNC'
+export const COUNTER_RESULT = 'COUNTER_RESULT'
 
 // ------------------------------------
 // Actions
@@ -10,6 +11,13 @@ export const COUNTER_DOUBLE_ASYNC = 'COUNTER_DOUBLE_ASYNC'
 export function increment (value = 1) {
   return {
     type    : COUNTER_INCREMENT,
+    payload : value
+  }
+}
+
+export function addResult (value = 1) {
+  return {
+    type    : COUNTER_RESULT,
     payload : value
   }
 }
@@ -32,11 +40,10 @@ export const doubleAsync = () => {
   }
 }
 
-export const pingEpic = (action$, { dispatch, getState }) => {
-  return action$.ofType(COUNTER_INCREMENT)
-    .delay(1000) // Asynchronously wait 1000ms then continue
-    .mapTo({ type: COUNTER_DOUBLE_ASYNC })
-}
+export const testEpic = (action$, { dispatch, getState }) => (
+  action$.ofType(COUNTER_INCREMENT)
+    .map(() => addResult(getState().counter))
+)
 
 export const actions = {
   increment,
@@ -48,6 +55,7 @@ export const actions = {
 // ------------------------------------
 const ACTION_HANDLERS = {
   [COUNTER_INCREMENT]    : (state, action) => state + action.payload,
+  [COUNTER_RESULT]       : (state, action) => state + action.payload,
   [COUNTER_DOUBLE_ASYNC] : (state, action) => state * 2
 }
 

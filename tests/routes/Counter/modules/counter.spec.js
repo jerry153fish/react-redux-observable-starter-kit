@@ -1,9 +1,16 @@
+import configureMockStore from 'redux-mock-store'
+import { createEpicMiddleware } from 'redux-observable'
+import 'rxjs'
 import {
   COUNTER_INCREMENT,
   increment,
   doubleAsync,
+  testEpic,
   default as counterReducer
 } from 'routes/Counter/modules/counter'
+
+const epicMiddleware = createEpicMiddleware(testEpic)
+const mockStore = configureMockStore([epicMiddleware])
 
 describe('(Redux Module) Counter', () => {
   it('Should export a constant COUNTER_INCREMENT.', () => {
@@ -104,6 +111,23 @@ describe('(Redux Module) Counter', () => {
           _getStateSpy.should.have.been.calledTwice
           expect(_globalState.counter).to.equal(8)
         })
+    })
+  })
+
+  describe('testEpic', () => {
+    let store
+
+    beforeEach(() => {
+      store = mockStore()
+    })
+
+    afterEach(() => {
+      epicMiddleware.replaceEpic(testEpic)
+    })
+
+    it('testEpic should return two actions', () => {
+      store.dispatch({ type: COUNTER_INCREMENT })
+      expect(store.getActions()).to.have.lengthOf(2)
     })
   })
 
